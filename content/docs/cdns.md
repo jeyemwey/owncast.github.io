@@ -38,19 +38,25 @@ While CDNs and storage providers are two different services, some object storage
 
 While it's impossible to go into detail for every CDN provider and configuration, here are the high level steps you'll need to take to put a CDN in front of your Owncast instance.
 
-### Without a storage provider
+### CDN in front of your entire Owncast server, without using a storage provider
 
 1. Your actual Owncast server, known to a CDN as the "origin", will need a publicly available hostname that is different than the one you use to access your Owncast instance. For example, if you want your viewers to access your Owncast instance at `https://owncast.example.com` you'll need to create a new hostname like `owncast-origin.example.com` and point it to your Owncast server.
 1. In your CDN configuration you'll need to tell it to use `owncast-origin.example.com` as the origin for your Owncast instance.
 1. You'll need to update your DNS configuration to point your Owncast hostname to your CDN. For example, if you access your Owncast instance at `https://owncast.example.com` you'll need to update your DNS configuration to point `owncast.example.com` to your CDN instead of your actual server.
 1. Visit your Owncast admin and under "Server Settings" under "Advanced" you'll set the websocket override to point to the origin hostname you created in step 1. For example, `wss://owncast-origin.example.com`. If you don't perform this step your chat will no longer be accessible for CDN providers who do not support passing through websockets.
 
-### With an external storage provider
+### CDN in front of only your video, using an external storage provider
 
 1. In this configuration your storage provider is the origin server, not your Owncast server.
 1. Get the endpoint hostname for your storage bucket from your provider.
 1. In your CDN configuration you'll need to tell it to use the storage provider hostname as the origin server.
 1. In the Owncast admin under "Storage" and "Advanced" you'll set the "Serving endpoint" to be the hostname of your CDN deployment.
+
+### CDN in front of only your video, without using an external storage provider
+
+1. In your CDN deployment you'll need to tell it to use your Owncast server as the origin server.
+1. In the Owncast admin under "Server Setup" under "Advanced Settings" you'll set the "Serving endpoint" to be the hostname of your CDN deployment.
+1. Now your viewers will be fetching your video stream through the CDN, but accessing your Owncast server directly for web assets and the user interface.
 
 ## Things to consider
 
